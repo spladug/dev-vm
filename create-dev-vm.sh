@@ -36,7 +36,7 @@ uvt-kvm create \
     --template $TEMPLATE \
     --package avahi-daemon \
     --run-script-once $BASE/bootstrap.sh \
-    $DOMAIN_NAME release=$RELEASE
+    $DOMAIN_NAME release=$RELEASE arch=amd64
 
 # wait for it to finish
 echo "creating domain $DOMAIN_NAME..."
