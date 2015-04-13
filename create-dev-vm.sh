@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+BASE=$(dirname $(readlink -f $0))
 RELEASE=$1
 DOMAIN_NAME=$2
 
@@ -34,7 +35,7 @@ xmlstarlet ed \
 uvt-kvm create \
     --template $TEMPLATE \
     --package avahi-daemon \
-    --run-script-once bootstrap.sh \
+    --run-script-once $BASE/bootstrap.sh \
     $DOMAIN_NAME release=$RELEASE
 
 # wait for it to finish
