@@ -21,6 +21,24 @@ Download appropriate cloud images. Example:
     uvt-simplestreams-libvirt sync release=precise arch=amd64
 
 
+## securing networking
+
+By default, the NAT bridge has access to everything your host machine has
+access to, including secure VPNs. To make this not the case, choose a specific
+network device as safe and modify the network config appropriately:
+
+    virsh net-edit default
+
+Then change `<forward mode='nat'>` to include `dev="wlan0"` (or whatever
+device) and restart the network:
+
+    virsh net-destroy default
+    virsh net-start default
+
+This should only need to be done once as all the guests by default will share
+that properly configured network from then on.
+
+
 ## usage
 
 The script is designed to work with Ubuntu Cloud Images that have a default
