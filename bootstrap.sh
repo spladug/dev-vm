@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # `ubuntu` this is the default on the ubuntu cloud images
 USER=ubuntu
@@ -10,6 +10,10 @@ SRC=/home/$USER/src
 mkdir -p $SRC
 chown ubuntu:ubuntu $SRC
 
+# make some overlayfs directories
+mkdir -p /home/$USER/.overlay/{work,upper}
+chown ubuntu:ubuntu /home/$USER/.overlay/{work,upper}
+
 # add 9p to initrd so mountall can mount these filesystems early on during boot
 cat <<END >> /etc/initramfs-tools/modules
 9p
@@ -19,10 +23,14 @@ END
 update-initramfs -u
 
 # set up the fstab entries for the passthrough and overlay filesystems
-cat <<END >> /etc/fstab
-src-passthrough /usr/local/src 9p ro,trans=virtio,version=9p2000.L 0 0
-overlayfs $SRC overlayfs lowerdir=/usr/local/src,upperdir=$SRC 0 0
-END
+echo "src-passthrough /usr/local/src 9p ro,trans=virtio,version=9p2000.L 0 0" >> /etc/fstab
+
+RELEASE=$(lsb_release -rs)
+if [ ${RELEASE%\.*} -ge 15 ]; then
+    echo "overlay $SRC overlay lowerdir=/usr/local/src,upperdir=/home/$USER/.overlay/upper,workdir=/home/$USER/.overlay/work 0 0" >> /etc/fstab
+else
+    echo "overlayfs $SRC overlayfs lowerdir=/usr/local/src,upperdir=/home/$USER/.overlay/upper 0 0" >> /etc/fstab
+fi
 
 # mount them right now
 mount /usr/local/src
