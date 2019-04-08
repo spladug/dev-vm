@@ -14,7 +14,7 @@ In particular, at the moment, this means:
 
 Install prerequisites:
 
-    sudo apt-get install uvtool xmlstarlet
+    sudo apt-get install uvtool-libvirt xmlstarlet
 
 Download appropriate cloud images. Example:
 
@@ -55,7 +55,7 @@ To create a VM, specify the release and the name of the domain:
 
 Once that's done, you can log in with SSH
 
-    uvt-kvm ssh --insecure testvm
+    uvt-kvm ssh testvm
 
 or
 
