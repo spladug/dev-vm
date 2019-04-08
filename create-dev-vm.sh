@@ -23,6 +23,8 @@ function clean_up {
 # make our own domain template based on the uvtool default with the passthrough
 # filesystem configuration added
 xmlstarlet ed \
+    -s '/domain' -t 'elem' -n 'cpu' \
+    -i '//cpu' -t 'attr' -n 'mode' -v 'host-model' \
     -s '/domain/devices' -t 'elem' -n 'passthrough-filesystem' \
     -i '//passthrough-filesystem' -t 'attr' -n 'type' -v 'mount' \
     -i '//passthrough-filesystem' -t 'attr' -n 'accessmode' -v 'squash' \
