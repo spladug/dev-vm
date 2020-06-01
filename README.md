@@ -49,13 +49,25 @@ host OS read-only to `/usr/local/src` in the guest.  The guest will then use
 overlayfs to put a read-write overlay in `/home/ubuntu/src` allowing build
 artifacts etc to live in the vm.
 
-To create a VM, specify the release and the name of the domain:
+Make sure you have an SSH key called `id_vm`. I just make a throw-away one for
+this so I don't have to deal with my more secure keys for local VMs.
 
-    ./create-dev-vm.sh precise testvm
+To create a VM, specify the release and the name of the domain (easiest if it
+matches the FQDN):
+
+    ./create-dev-vm.sh testvm.local
+
+You can also customize the creation of the VM with environment variables:
+
+* `MEMORY`: memory in megabytes
+* `CPUS`: how many CPU cores to let the VM use
+* `DISK`: disk space in gigabytes
+* `RELEASE`: the codename of the Ubuntu release to use, defaults to whatever is
+  on the host (e.g. `bionic`, `focal`)
 
 Once that's done, you can log in with SSH
 
-    uvt-kvm ssh testvm
+    uvt-kvm ssh testvm.local
 
 or
 
